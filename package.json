@@ -1,0 +1,20 @@
+{
+  "name": "bn-enterprises-mern-root",
+  "version": "1.0.0",
+  "description": "B.N Enterprises — Minimalist B2B Wholesale Cosmetic Dealer MERN Web App",
+  "scripts": {
+    "client": "npm --prefix client run dev",
+    "client:build": "npm --prefix client run build",
+    "server": "npm --prefix server run start",
+    "dev:server": "npm --prefix server run dev"
+  },
+  "keywords": [
+    "bn-enterprises",
+    "wholesale-cosmetics",
+    "mern-stack",
+    "b2b-portal"
+  ],
+  "author": "B.N Enterprises",
+  "license": "ISC"
+}
+
