@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "description": "B.N Enterprises — Minimalist B2B Wholesale Cosmetic Dealer MERN Web App",
   "scripts": {
+    "build": "npm --prefix client install && npm --prefix client run build && npm --prefix server install",
+    "start": "node server/server.js",
     "client": "npm --prefix client run dev",
     "client:build": "npm --prefix client run build",
     "server": "npm --prefix server run start",
@@ -17,4 +19,3 @@
   "author": "B.N Enterprises",
   "license": "ISC"
 }
-

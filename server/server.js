@@ -2,6 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const path = require('path');
+const fs = require('fs');
 const apiRoutes = require('./routes/api');
 const { autoSeedIfEmpty } = require('./controllers/catalogController');
 
@@ -57,7 +59,20 @@ mongoose
     console.warn(`[MongoDB] Offline or unreachable (${err.message}). Running with high-availability in-memory catalog and enquiry buffer.`);
   });
 
-// 404 Handler
+// Production Static Assets (Single-Deployment Support)
+const clientDistPath = path.join(__dirname, '../client/dist');
+if (fs.existsSync(clientDistPath)) {
+  app.use(express.static(clientDistPath));
+
+  app.get('*', (req, res, next) => {
+    if (req.url.startsWith('/api')) {
+      return next();
+    }
+    res.sendFile(path.join(clientDistPath, 'index.html'));
+  });
+}
+
+// 404 Handler for API routes
 app.use((req, res) => {
   res.status(404).json({
     success: false,
