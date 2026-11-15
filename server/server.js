@@ -27,8 +27,8 @@ app.use((req, res, next) => {
 // Mount Central API Routes under /api
 app.use('/api', apiRoutes);
 
-// Root Welcome Endpoint
-app.get('/', (req, res) => {
+// Central API Root Welcome Endpoint
+app.get('/api', (req, res) => {
   res.json({
     company: 'B.N Enterprises',
     division: 'Wholesale Cosmetic Dealer & Distribution Hub',
@@ -60,15 +60,25 @@ mongoose
   });
 
 // Production Static Assets (Single-Deployment Support)
-const clientDistPath = path.join(__dirname, '../client/dist');
-if (fs.existsSync(clientDistPath)) {
-  app.use(express.static(clientDistPath));
+const distPaths = [
+  path.join(__dirname, 'public'),
+  path.join(__dirname, '../client/dist'),
+  path.join(process.cwd(), 'client/dist'),
+  path.join(process.cwd(), 'server/public'),
+  path.join(process.cwd(), 'public'),
+];
+
+const activeDistPath = distPaths.find((p) => fs.existsSync(path.join(p, 'index.html')));
+
+if (activeDistPath) {
+  console.log(`[Static Serving] Serving React SPA from: ${activeDistPath}`);
+  app.use(express.static(activeDistPath));
 
   app.get('*', (req, res, next) => {
     if (req.url.startsWith('/api')) {
       return next();
     }
-    res.sendFile(path.join(clientDistPath, 'index.html'));
+    res.sendFile(path.join(activeDistPath, 'index.html'));
   });
 }
 
